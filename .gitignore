@@ -1,3 +1,7 @@
+# go
+*.env
+go/gotmaazd
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
