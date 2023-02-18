@@ -25,6 +25,7 @@ func loadClient() *helix.Client {
 }
 
 func main() {
+	getAuth()
 
 	resp, err := client.GetUsers(&helix.UsersParams{
 		Logins: channels,
