@@ -10,7 +10,7 @@ import (
 
 var client *helix.Client = loadClient()
 var channels = []string{"channel1", "channel2"}
-var scopers = []string{
+var scopes = []string{
 	"analytics:read:games",
 	"bits:read",
 	"channel:manage:broadcast",
@@ -63,8 +63,13 @@ func main() {
 	}
 
 	if !tokenIsValid {
-		fmt.Println("Please generate a new token and add it to the .env file")
-		getAuth()
+		fmt.Println("Please insert this token in the .env file (ACCESS_TOKEN field)")
+		resp, err := client.RequestAppAccessToken(scopes)
+		if err != nil {
+			// handle error
+		}
+
+		fmt.Printf("%+v\n", resp.Data.AccessToken)
 		return
 	}
 
