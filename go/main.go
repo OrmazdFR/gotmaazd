@@ -10,6 +10,36 @@ import (
 
 var client *helix.Client = loadClient()
 var channels = []string{"channel1", "channel2"}
+var scopers = []string{
+	"analytics:read:games",
+	"bits:read",
+	"channel:manage:broadcast",
+	"channel:manage:moderators",
+	"channel:manage:polls",
+	"channel:manage:predictions",
+	"channel:manage:raids",
+	"channel:manage:redemptions",
+	"channel:read:hype_train",
+	"channel:read:polls",
+	"channel:read:predictions",
+	"channel:read:redemptions",
+	"channel:read:subscriptions",
+	"channel:read:vips",
+	"channel:manage:vips",
+	"moderation:read",
+	"moderator:manage:announcements",
+	"moderator:manage:banned_users",
+	"moderator:manage:blocked_terms",
+	"moderator:manage:chat_messages",
+	"moderator:read:chat_settings",
+	"moderator:manage:chat_settings",
+	"moderator:read:chatters",
+	"moderator:read:shoutouts",
+	"moderator:manage:shoutouts",
+	"channel:moderate",
+	"chat:edit",
+	"chat:read",
+}
 
 func loadClient() *helix.Client {
 	client, err := helix.NewClient(&helix.Options{
@@ -25,8 +55,23 @@ func loadClient() *helix.Client {
 }
 
 func main() {
-	getAuth()
 
+	tokenIsValid, _, err := client.ValidateToken(os.Getenv("ACCESS_TOKEN"))
+	if err != nil {
+		fmt.Println("Error : ", err)
+		return
+	}
+
+	if !tokenIsValid {
+		fmt.Println("Please generate a new token and add it to the .env file")
+		getAuth()
+		return
+	}
+
+	getUsers()
+}
+
+func getUsers() {
 	resp, err := client.GetUsers(&helix.UsersParams{
 		Logins: channels,
 	})
