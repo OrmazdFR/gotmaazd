@@ -1,6 +1,7 @@
 # go
 *.env
 go/gotmaazd
+go/scopes.bckp
 
 # Binaries for programs and plugins
 *.exe
