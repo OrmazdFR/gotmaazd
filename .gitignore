@@ -1,5 +1,5 @@
 # go
-*.env
+*.env*
 go/gotmaazd
 go/scopes.bckp
 
