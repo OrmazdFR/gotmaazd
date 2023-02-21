@@ -9,12 +9,12 @@ import (
 )
 
 var client *helix.Client = loadClient()
-var channels = []string{"channel1", "channel2"}
 var scopes = []string{
 	"moderator:manage:announcements",
+	"channel:read:subscriptions",
 }
-var broadcasterId = "555891"
-var moderatorId = "555891"
+var broadcasterName = "ormaazd"
+var moderatorName = "ormaazd"
 
 func loadClient() *helix.Client {
 	client, err := helix.NewClient(&helix.Options{
@@ -33,11 +33,28 @@ func loadClient() *helix.Client {
 
 func main() {
 	checkAuthRoutine()
-	getUsers()
-	sendChatAnnouncement("It's working !")
+	getUsers([]string{"channel1", "channel2"})
+	getSubscribersInfos("channel1")
+	sendChatAnnouncement("Chat Announcement", broadcasterName, moderatorName)
 }
 
-func getUsers() {
+func getUserId(username string) string {
+	resp, err := client.GetUsers(&helix.UsersParams{
+		Logins: []string{username},
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	if resp.StatusCode != 200 {
+		fmt.Println("Erreur lors de la récupération des Users")
+		panic(resp.ErrorStatus)
+	}
+
+	return resp.Data.Users[0].ID
+}
+
+func getUsers(channels []string) {
 	resp, err := client.GetUsers(&helix.UsersParams{
 		Logins: channels,
 	})
@@ -56,11 +73,11 @@ func getUsers() {
 	}
 }
 
-func sendChatAnnouncement(message string) {
+func sendChatAnnouncement(message string, broadcaster string, moderator string) {
 	resp, err := client.SendChatAnnouncement(&helix.SendChatAnnouncementParams{
-		BroadcasterID: broadcasterId,
-		ModeratorID:   moderatorId,
 		Message:       message,
+		BroadcasterID: getUserId(broadcaster),
+		ModeratorID:   getUserId(moderator),
 	})
 	if err != nil {
 		panic(err)
@@ -71,4 +88,21 @@ func sendChatAnnouncement(message string) {
 	}
 
 	fmt.Println("Annonce envoyée : ", message)
+}
+
+func getSubscribersInfos(broadcaster string) {
+	resp, err := client.GetSubscriptions(&helix.SubscriptionsParams{
+		BroadcasterID: getUserId(broadcaster),
+	})
+	if err != nil {
+		// handle error
+	}
+	if resp.StatusCode != 200 {
+		fmt.Println("Not authorized to retrieve", broadcaster, "subscribers")
+		return
+	}
+
+	for _, subscriber := range resp.Data.Subscriptions {
+		fmt.Println(subscriber.UserName, "Tier:", subscriber.Tier[0:1])
+	}
 }
