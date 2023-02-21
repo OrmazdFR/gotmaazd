@@ -21,3 +21,7 @@ I already developped Botmaazd in JS using the tmi.js module, but the functionnal
 ## nicklaw5/helix
 
 Many thanks to nicklaw5 that developped this nice Twitch Helix API client written in Go. It will be very useful : https://github.com/nicklaw5/helix
+
+## gempir/go-twitch-irc
+
+Also many thanks to gempir for developping a simple Go Twitch IRC implementation. Your work is appreciated : https://github.com/gempir/go-twitch-irc

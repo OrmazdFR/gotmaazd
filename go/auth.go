@@ -8,7 +8,9 @@ import (
 )
 
 func checkAuthRoutine() {
+	fmt.Println("Checking User Token")
 	checkUserToken()
+	fmt.Println("Checking App Token")
 	checkAppToken()
 }
 

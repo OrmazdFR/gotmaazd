@@ -10,11 +10,13 @@ import (
 
 var client *helix.Client = loadClient()
 var scopes = []string{
+	"chat:edit",
+	"chat:read",
 	"moderator:manage:announcements",
 	"channel:read:subscriptions",
 }
 var broadcasterName = "ormaazd"
-var moderatorName = "ormaazd"
+var chatterName = "ormaazd"
 
 func loadClient() *helix.Client {
 	client, err := helix.NewClient(&helix.Options{
@@ -33,9 +35,10 @@ func loadClient() *helix.Client {
 
 func main() {
 	checkAuthRoutine()
+	startIRCClient()
 	getUsers([]string{"channel1", "channel2"})
 	getSubscribersInfos("channel1")
-	sendChatAnnouncement("Chat Announcement", broadcasterName, moderatorName)
+	sendChatAnnouncement("Chat Announcement", broadcasterName, chatterName)
 }
 
 func getUserId(username string) string {
