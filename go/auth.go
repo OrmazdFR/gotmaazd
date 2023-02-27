@@ -20,13 +20,13 @@ func checkUserToken() {
 	isValid, _, err := client.ValidateToken(userAccessToken)
 	if err != nil {
 		fmt.Println("Error during User Token check")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	if !isValid {
 		fmt.Println("USER TOKEN INCORRECT")
 		getUserAccessToken()
-		os.Exit(0)
+		os.Exit(1)
 	}
 }
 
@@ -35,8 +35,8 @@ func getUserAccessToken() {
 
 	resp, err := client.RequestUserAccessToken(code)
 	if err != nil {
-		// handle error
-		os.Exit(0)
+		fmt.Println("Couldn't request Access Token")
+		os.Exit(1)
 	}
 
 	if resp.StatusCode != 200 {
@@ -44,6 +44,7 @@ func getUserAccessToken() {
 	}
 
 	fmt.Printf("VEUILLEZ INSÉRER CE TOKEN DANS LE .env (USER_ACCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
+	os.Exit(1)
 }
 
 func checkAppToken() {
@@ -69,7 +70,7 @@ func checkCode() {
 	if len(os.Getenv("CODE")) <= 0 {
 		fmt.Println("LA VARIABLE ENVIRONEMENT 'CODE' N'EST PAS DÉFINIE, VEUILLEZ RÉCUPÉRER LE CODE DEPUIS CE LIEN ET L'INSÉRER DANS LE .ENV :")
 		getCodeURL()
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	code := os.Getenv("CODE")
@@ -77,7 +78,7 @@ func checkCode() {
 	if err != nil || resp.StatusCode != 200 {
 		fmt.Println("VARIABLE ENVIRONEMENT 'CODE' INCORRECTE, VEUILLEZ RÉCUPÉRER LE CODE DEPUIS CE LIEN ET L'INSÉRER DANS LE .ENV :")
 		getCodeURL()
-		os.Exit(0)
+		os.Exit(1)
 	}
 	fmt.Println("Code bon")
 }
