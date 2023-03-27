@@ -8,7 +8,7 @@ import (
 	"github.com/nicklaw5/helix/v2"
 )
 
-var client *helix.Client = loadClient()
+var client *helix.Client = loadHelixClient()
 var scopes = []string{
 	"chat:edit",
 	"chat:read",
@@ -16,14 +16,13 @@ var scopes = []string{
 	"channel:read:subscriptions",
 }
 var broadcasterName = "ormaazd"
-var chatterName = "ormaazd"
 
-func loadClient() *helix.Client {
+func loadHelixClient() *helix.Client {
 	client, err := helix.NewClient(&helix.Options{
 		ClientID:        os.Getenv("CLIENT_ID"),
 		ClientSecret:    os.Getenv("CLIENT_SECRET"),
 		AppAccessToken:  os.Getenv("ACCESS_TOKEN"),
-		UserAccessToken: os.Getenv("USER_ACCESS_TOKEN"),
+		UserAccessToken: os.Getenv("ADMIN_ACCESS_TOKEN"),
 		RedirectURI:     os.Getenv("REDIRECT_URL"),
 	})
 	if err != nil {
@@ -36,9 +35,6 @@ func loadClient() *helix.Client {
 func main() {
 	checkAuthRoutine()
 	startIRCClient()
-	getUsers([]string{"channel1", "channel2"})
-	getSubscribersInfos("channel1")
-	sendChatAnnouncement("Chat Announcement", broadcasterName, chatterName)
 }
 
 func getUserId(username string) string {
@@ -98,7 +94,8 @@ func getSubscribersInfos(broadcaster string) {
 		BroadcasterID: getUserId(broadcaster),
 	})
 	if err != nil {
-		// handle error
+		fmt.Println("Error getting subsrivers infos : ", err)
+		return
 	}
 	if resp.StatusCode != 200 {
 		fmt.Println("Not authorized to retrieve", broadcaster, "subscribers")

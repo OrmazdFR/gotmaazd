@@ -25,8 +25,7 @@ func setHandlers(ircClient *twitch.Client) {
 }
 
 func initIRCClient() *twitch.Client {
-	ircClient := twitch.NewClient(chatterName, fmt.Sprintf("oauth:"+os.Getenv("USER_ACCESS_TOKEN")))
-	// ircClient.IrcAddress = "irc-ws.chat.twitch.tv:443"
+	ircClient := twitch.NewClient(broadcasterName, fmt.Sprintf("oauth:"+os.Getenv("USER_ACCESS_TOKEN")))
 	ircClient.Join(broadcasterName)
 	return ircClient
 }
@@ -34,7 +33,7 @@ func initIRCClient() *twitch.Client {
 func setConnectHandler(ircClient *twitch.Client) {
 	ircClient.OnConnect(func() {
 		fmt.Println("Connected")
-		ircClient.Say(broadcasterName, "Hi, I'm "+chatterName)
+		ircClient.Say(broadcasterName, "Hi, I'm "+broadcasterName)
 	})
 }
 

@@ -32,7 +32,6 @@ func checkUserToken() {
 
 func getUserAccessToken() {
 	code := os.Getenv("CODE")
-
 	resp, err := client.RequestUserAccessToken(code)
 	if err != nil {
 		fmt.Println("Couldn't request Access Token")
@@ -43,7 +42,7 @@ func getUserAccessToken() {
 		checkCode()
 	}
 
-	fmt.Printf("VEUILLEZ INSÉRER CE TOKEN DANS LE .env (USER_ACCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
+	fmt.Printf("VEUILLEZ INSÉRER CE TOKEN DANS LE .env (USER_CCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
 	os.Exit(1)
 }
 
