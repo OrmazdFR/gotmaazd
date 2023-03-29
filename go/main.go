@@ -22,7 +22,7 @@ func loadHelixClient() *helix.Client {
 		ClientID:        os.Getenv("CLIENT_ID"),
 		ClientSecret:    os.Getenv("CLIENT_SECRET"),
 		AppAccessToken:  os.Getenv("ACCESS_TOKEN"),
-		UserAccessToken: os.Getenv("ADMIN_ACCESS_TOKEN"),
+		UserAccessToken: os.Getenv("USER_ACCESS_TOKEN"),
 		RedirectURI:     os.Getenv("REDIRECT_URL"),
 	})
 	if err != nil {
