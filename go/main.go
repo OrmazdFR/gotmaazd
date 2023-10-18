@@ -16,7 +16,7 @@ var scopes = []string{
 	"channel:read:subscriptions",
 }
 var broadcasterName = "ormaazd"
-
+const tester = "test";
 func loadHelixClient() *helix.Client {
 	client, err := helix.NewClient(&helix.Options{
 		ClientID:        os.Getenv("CLIENT_ID"),
@@ -53,7 +53,7 @@ func getUserId(username string) string {
 	return resp.Data.Users[0].ID
 }
 
-func getUsers(channels []string) {
+func getUsers(channels []string) []helix.User {
 	resp, err := client.GetUsers(&helix.UsersParams{
 		Logins: channels,
 	})
@@ -63,13 +63,14 @@ func getUsers(channels []string) {
 
 	if resp.StatusCode != 200 {
 		fmt.Println("Erreur lors de la récupération des Users")
-		return
+		return nil
 	}
 
 	fmt.Println("Users :")
 	for _, user := range resp.Data.Users {
 		fmt.Printf("ID: %s Name: %s\n", user.ID, user.DisplayName)
 	}
+	return resp.Data.Users
 }
 
 func sendChatAnnouncement(message string, broadcaster string, moderator string) {
