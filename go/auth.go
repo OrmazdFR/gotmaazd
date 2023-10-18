@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"github.com/joho/godotenv"
+
 	"github.com/nicklaw5/helix/v2"
 )
 
@@ -43,11 +43,6 @@ func getUserAccessToken() {
 	}
 
 	fmt.Printf("VEUILLEZ INSÉRER CE TOKEN DANS LE .env (USER_ACCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
-	env, _ := godotenv.Unmarshal("USER_ACCESS_TOKEN=" + resp.Data.AccessToken)
-	error := godotenv.Write(env, "./.env")
-	if error != nil {
-		fmt.Println("Error poto")
-	}
 	os.Exit(1)
 }
 
