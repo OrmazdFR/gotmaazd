@@ -24,7 +24,7 @@ func checkUserToken() {
 	}
 
 	if !isValid {
-		fmt.Println("USER TOKEN INCORRECT")
+		fmt.Println("USER_ACCESS_TOKEN incorrect")
 		getUserAccessToken()
 		os.Exit(1)
 	}
@@ -42,7 +42,7 @@ func getUserAccessToken() {
 		checkCode()
 	}
 
-	fmt.Printf("VEUILLEZ INSÉRER CE TOKEN DANS LE .env (USER_ACCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
+	fmt.Printf("Veuillez insérer ce token dans le .env (USER_ACCESS_TOKEN) : %+v\n", resp.Data.AccessToken)
 	os.Exit(1)
 }
 
@@ -54,12 +54,13 @@ func checkAppToken() {
 	}
 
 	if !appTokenIsValid {
-		fmt.Println("Please insert this token in the .env file (ACCESS_TOKEN field)")
 		resp, err := client.RequestAppAccessToken(scopes)
 		if err != nil {
-			// handle error
+			fmt.Println("Error while requesting the App ACCESS_TOKEN, shuting down")
+			os.Exit(1)
 		}
 
+		fmt.Println("Please insert this token in the .env file (ACCESS_TOKEN field)")
 		fmt.Printf("%+v\n", resp.Data.AccessToken)
 		return
 	}
@@ -67,7 +68,7 @@ func checkAppToken() {
 
 func checkCode() {
 	if len(os.Getenv("CODE")) <= 0 {
-		fmt.Println("LA VARIABLE ENVIRONEMENT 'CODE' N'EST PAS DÉFINIE, VEUILLEZ RÉCUPÉRER LE CODE DEPUIS CE LIEN ET L'INSÉRER DANS LE .ENV :")
+		fmt.Println("La variable environement 'CODE' n'est pas définie, veuillez récupérer le code depuis ce lien et l'insérer dans le .env :")
 		getCodeURL()
 		os.Exit(1)
 	}
@@ -75,7 +76,10 @@ func checkCode() {
 	code := os.Getenv("CODE")
 	resp, err := client.RequestUserAccessToken(code)
 	if err != nil || resp.StatusCode != 200 {
-		fmt.Println("VARIABLE ENVIRONEMENT 'CODE' INCORRECTE, VEUILLEZ RÉCUPÉRER LE CODE DEPUIS CE LIEN ET L'INSÉRER DANS LE .ENV :")
+		fmt.Println("Variable environement 'CODE' incorrecte")
+		fmt.Println("Veuillez supprimer le contenu de USER_ACCESS_TOKEN, puis")
+		fmt.Println("récupérez le code depuis ce lien et l'insérer dans le .env")
+		fmt.Println("dans le champ CODE :")
 		getCodeURL()
 		os.Exit(1)
 	}
